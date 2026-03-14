@@ -1,0 +1,28 @@
+﻿name: pull-request-checks
+
+on:
+  pull_request:
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install root test dependencies
+        run: npm install
+      - name: Validate syntax for service entrypoints
+        run: |
+          node --check services/gateway-service/server.js
+          node --check services/frontend-service/server.js
+          node --check services/auth-service/server.js
+          node --check services/user-service/server.js
+          node --check services/social-service/server.js
+          node --check services/post-service/server.js
+          node --check services/engagement-service/server.js
+          node --check services/feed-service/server.js
+          node --check services/media-service/server.js
+      - name: Run unit tests with coverage threshold
+        run: npm run test:unit

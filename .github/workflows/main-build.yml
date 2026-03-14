@@ -1,0 +1,66 @@
+﻿name: main-build
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install root test dependencies
+        run: npm install
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Start stack for API/UI tests
+        run: docker compose up --build -d
+
+      - name: Wait for frontend
+        run: |
+          for i in {1..30}; do
+            if curl -fsS http://localhost:3000 > /dev/null; then
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Frontend did not start in time" && exit 1
+
+      - name: API integration tests
+        run: npm run test:api
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: UI integration tests
+        run: npm run test:ui
+
+      - name: Timestamp tag
+        id: ts
+        run: echo "tag=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
+
+      - name: Build service images
+        run: |
+          docker build -t instagram/gateway-service:${{ steps.ts.outputs.tag }} services/gateway-service
+          docker build -t instagram/frontend-service:${{ steps.ts.outputs.tag }} services/frontend-service
+          docker build -t instagram/auth-service:${{ steps.ts.outputs.tag }} services/auth-service
+          docker build -t instagram/user-service:${{ steps.ts.outputs.tag }} services/user-service
+          docker build -t instagram/social-service:${{ steps.ts.outputs.tag }} services/social-service
+          docker build -t instagram/post-service:${{ steps.ts.outputs.tag }} services/post-service
+          docker build -t instagram/engagement-service:${{ steps.ts.outputs.tag }} services/engagement-service
+          docker build -t instagram/feed-service:${{ steps.ts.outputs.tag }} services/feed-service
+          docker build -t instagram/media-service:${{ steps.ts.outputs.tag }} services/media-service
+
+      - name: Push images (placeholder)
+        run: echo "Dodaj docker login i docker push komande ovde."
+
+      - name: Stop stack
+        if: always()
+        run: docker compose down -v

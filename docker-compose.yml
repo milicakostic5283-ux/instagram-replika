@@ -1,0 +1,150 @@
+﻿services:
+  gateway-service:
+    build: ./services/gateway-service
+    environment:
+      - PORT=8080
+      - AUTH_URL=http://auth-service:8081
+      - USER_URL=http://user-service:8082
+      - SOCIAL_URL=http://social-service:8083
+      - POST_URL=http://post-service:8084
+      - ENGAGEMENT_URL=http://engagement-service:8085
+      - FEED_URL=http://feed-service:8086
+      - MEDIA_URL=http://media-service:8087
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - user-service
+      - social-service
+      - post-service
+      - engagement-service
+      - feed-service
+      - media-service
+
+  frontend-service:
+    build: ./services/frontend-service
+    environment:
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - gateway-service
+
+  auth-service:
+    build: ./services/auth-service
+    environment:
+      - PORT=8081
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=insta
+      - DB_USER=insta
+      - DB_PASSWORD=insta
+      - JWT_SECRET=super-secret-key
+      - ACCESS_TOKEN_TTL_SEC=3600
+      - REFRESH_TOKEN_TTL_SEC=1209600
+    depends_on:
+      - postgres
+
+  user-service:
+    build: ./services/user-service
+    environment:
+      - PORT=8082
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=insta
+      - DB_USER=insta
+      - DB_PASSWORD=insta
+    depends_on:
+      - postgres
+
+  social-service:
+    build: ./services/social-service
+    environment:
+      - PORT=8083
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=insta
+      - DB_USER=insta
+      - DB_PASSWORD=insta
+    depends_on:
+      - postgres
+
+  post-service:
+    build: ./services/post-service
+    environment:
+      - PORT=8084
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=insta
+      - DB_USER=insta
+      - DB_PASSWORD=insta
+    depends_on:
+      - postgres
+
+  engagement-service:
+    build: ./services/engagement-service
+    environment:
+      - PORT=8085
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=insta
+      - DB_USER=insta
+      - DB_PASSWORD=insta
+    depends_on:
+      - postgres
+
+  feed-service:
+    build: ./services/feed-service
+    environment:
+      - PORT=8086
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=insta
+      - DB_USER=insta
+      - DB_PASSWORD=insta
+    depends_on:
+      - postgres
+
+  media-service:
+    build: ./services/media-service
+    environment:
+      - PORT=8087
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=insta
+      - DB_USER=insta
+      - DB_PASSWORD=insta
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=insta
+      - POSTGRES_PASSWORD=insta
+      - POSTGRES_DB=insta
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=minio123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+volumes:
+  pg_data:
