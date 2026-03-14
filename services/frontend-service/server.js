@@ -34,7 +34,12 @@ const server = http.createServer((req, res) => {
       res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
       return res.end("Not found");
     }
-    res.writeHead(200, { "Content-Type": contentType(fullPath) });
+    res.writeHead(200, {
+      "Content-Type": contentType(fullPath),
+      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      "Pragma": "no-cache",
+      "Expires": "0"
+    });
     res.end(data);
   });
 });

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Instagram</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="stylesheet" href="/styles.css?v=20260314g" />
+  <link rel="stylesheet" href="/styles.css?v=20260314r" />
 </head>
 <body>
   <header class="topbar" id="topHome">
@@ -16,11 +16,11 @@
         <button id="btnSound" class="theme-btn sound-btn" type="button" title="Zvuk notifikacija">SOUND ON</button>
       </div>
       <nav class="ig-nav" aria-label="Primary">
-        <button class="nav-btn" data-scroll="topHome" type="button"><span class="nav-icon">o</span><span>Home</span></button>
-        <button class="nav-btn" data-scroll="searchCard" type="button"><span class="nav-icon">Q</span><span>Search</span></button>
-        <button class="nav-btn nav-btn-badge" data-scroll="notificationsCard" type="button"><span class="nav-icon">*</span><span>Notifications</span> <span id="navNotifBadge" class="notif-badge hidden">0</span></button>
-        <button class="nav-btn" data-scroll="reelsCard" type="button"><span class="nav-icon">R</span><span>Reels</span></button>
-        <button class="nav-btn" data-scroll="profileHero" type="button"><span class="nav-icon">@</span><span>Profile</span></button>
+        <button id="btnNavHome" class="nav-btn" data-scroll="topHome" type="button" onclick="window.IG.navHome();return false;"><span class="nav-icon">o</span><span>Home</span></button>
+        <button id="btnNavSearch" class="nav-btn" data-scroll="searchCard" type="button" onclick="window.IG.navSearch();return false;"><span class="nav-icon">Q</span><span>Search</span></button>
+        <button id="btnNavNotifications" class="nav-btn nav-btn-badge" data-scroll="notificationsCard" type="button" onclick="window.IG.navNotifications();return false;"><span class="nav-icon">*</span><span>Notifications</span> <span id="navNotifBadge" class="notif-badge hidden">0</span></button>
+        <button id="btnNavReels" class="nav-btn" data-scroll="reelsCard" type="button" onclick="window.IG.navReels();return false;"><span class="nav-icon">R</span><span>Reels</span></button>
+        <button id="btnNavProfile" class="nav-btn" data-scroll="profileHero" type="button" onclick="window.IG.navProfile();return false;"><span class="nav-icon">@</span><span>Profile</span></button>
       </nav>
       <div class="top-icons" aria-hidden="true">
         <span class="icon-dot"></span>
@@ -41,9 +41,9 @@
             <div class="hero-top-row">
               <h2 id="heroUsername">@demo_korisnik</h2>
               <div class="hero-actions">
-                <button id="btnHeroFollow" class="hero-btn hero-btn-primary" type="button">Following</button>
-                <button id="btnHeroMessage" class="hero-btn" type="button">Message</button>
-                <button id="btnHeroEdit" class="hero-btn" type="button">Edit profile</button>
+                <button id="btnHeroFollow" class="hero-btn hero-btn-primary" type="button" onclick="window.IG.heroFollow();return false;">Following</button>
+                <button id="btnHeroMessage" class="hero-btn" type="button" onclick="window.IG.heroMessage();return false;">Message</button>
+                <button id="btnHeroEdit" class="hero-btn" type="button" onclick="window.IG.heroEdit();return false;">Edit profile</button>
                 <button id="btnHeroMore" class="hero-btn hero-btn-icon" type="button" aria-label="More options">...</button>
               </div>
             </div>
@@ -175,8 +175,8 @@
     <section class="card" id="searchCard">
       <h2>Pretraga korisnika</h2>
       <div class="search-toolbar">
-        <input id="searchInput" placeholder="Pretrazi profile i objave" />
-        <button id="btnSearch" class="search-btn" type="button">Search</button>
+        <input id="searchInput" placeholder="Pretrazi profile i objave" style="background:#f8fbff;color:#0f172a;-webkit-text-fill-color:#0f172a;caret-color:#0f172a;" />
+        <button id="btnSearch" class="search-btn" type="button" onclick="window.IG.searchRun();return false;">Search</button>
       </div>
       <div id="searchResults"></div>
       <div class="search-suggested-block">
@@ -205,8 +205,8 @@
       </div>
     </section>
 
-    <section class="card hidden direct-drawer" id="directCard">
-      <div class="direct-drawer-head"><h2>Direct Messages</h2><button id="btnCloseDirect" class="hero-btn hero-btn-icon" type="button">x</button></div>
+    <section class="card hidden direct-drawer" id="directCard" style="display:none;position:static;width:100%;height:auto;max-width:100%;max-height:none;overflow:visible;">
+      <div class="direct-drawer-head"><h2>Direct Messages</h2><button id="btnCloseDirect" class="hero-btn hero-btn-icon" type="button" onclick="window.IG.closeDirect();return false;">x</button></div>
       <div class="direct-layout">
         <div class="direct-inbox-panel">
           <h3>Inbox</h3>
@@ -235,14 +235,14 @@
       <p class="small">Ako nemas URL, izaberi sliku ili video sa racunara.</p>
       <input id="postMediaType" placeholder="image ili video" value="image" />
       <input id="postMediaSize" placeholder="Velicina u MB" value="1.5" />
-      <button id="btnCreatePost">Kreiraj objavu</button>
+      <button id="btnCreatePost" onclick="window.IG.createPostRun();return false;">Kreiraj objavu</button>
       <div id="createPostInfo" class="small"></div>
     </section>
 
     <section class="card" id="myPostsCard">
       <h2>Moje objave</h2>
       <div class="row compact-row">
-        <div><button id="btnLoadMyPosts">Ucitaj moje objave</button></div>
+        <div><button id="btnLoadMyPosts" onclick="window.IG.myPostsRun();return false;">Ucitaj moje objave</button></div>
         <div><button id="btnMyPostsAll" class="secondary" type="button">Sve</button></div>
         <div><button id="btnMyPostsImages" class="secondary" type="button">Slike</button></div>
         <div><button id="btnMyPostsVideos" class="secondary" type="button">Reels</button></div>
@@ -254,8 +254,8 @@
     <section class="card" id="notificationsCard">
       <h2>Notifikacije</h2>
       <div class="row">
-        <div><button id="btnLoadNotifications">Ucitaj notifikacije</button></div>
-        <div><button id="btnReadAllNotifications">Oznaci sve kao procitano</button></div>
+        <div><button id="btnLoadNotifications" onclick="window.IG.notificationsRun();return false;">Ucitaj notifikacije</button></div>
+        <div><button id="btnReadAllNotifications" onclick="window.IG.notificationsRead();return false;">Oznaci sve kao procitano</button></div>
       </div>
       <div id="notificationsMeta" class="small"></div>
       <div id="notificationsList"></div>
@@ -264,11 +264,11 @@
     <section class="card" id="feedCard">
       <h2>Feed</h2>
       <div class="row compact-row">
-        <div><button id="btnLoadFeed">Ucitaj feed</button></div>
+        <div><button id="btnLoadFeed" onclick="window.IG.feedRun();return false;">Ucitaj feed</button></div>
         <div><button id="btnFeedAll" class="secondary" type="button">Sve</button></div>
         <div><button id="btnFeedImages" class="secondary" type="button">Slike</button></div>
         <div><button id="btnFeedVideos" class="secondary" type="button">Reels</button></div>
-        <div><button id="btnToggleReelsMode" class="secondary" type="button">Reels mode: OFF</button></div>
+        <div><button id="btnToggleReelsMode" class="secondary" type="button" onclick="window.IG.reelsMode();return false;">Reels mode: OFF</button></div>
       </div>
       <div id="feedStatus" class="small"></div>
       <div id="feed"></div>
@@ -292,11 +292,11 @@
     <button id="btnDirectFab" class="direct-fab" type="button" aria-label="Open direct">DM</button></main>
 
   <nav class="mobile-bottom-nav" aria-label="Mobile">
-    <button class="mobile-nav-btn" data-scroll="topHome" type="button"><span class="nav-icon">o</span><span>Home</span></button>
-    <button class="mobile-nav-btn" data-scroll="searchCard" type="button"><span class="nav-icon">Q</span><span>Search</span></button>
-    <button class="mobile-nav-btn nav-btn-badge" data-scroll="notificationsCard" type="button"><span class="nav-icon">*</span><span>Notif</span> <span id="mobileNavNotifBadge" class="notif-badge hidden">0</span></button>
-    <button class="mobile-nav-btn" data-scroll="reelsCard" type="button"><span class="nav-icon">R</span><span>Reels</span></button>
-    <button class="mobile-nav-btn" data-scroll="profileHero" type="button"><span class="nav-icon">@</span><span>Profile</span></button>
+    <button class="mobile-nav-btn" data-scroll="topHome" type="button" onclick="window.IG.navHome();return false;"><span class="nav-icon">o</span><span>Home</span></button>
+    <button class="mobile-nav-btn" data-scroll="searchCard" type="button" onclick="window.IG.navSearch();return false;"><span class="nav-icon">Q</span><span>Search</span></button>
+    <button class="mobile-nav-btn nav-btn-badge" data-scroll="notificationsCard" type="button" onclick="window.IG.navNotifications();return false;"><span class="nav-icon">*</span><span>Notif</span> <span id="mobileNavNotifBadge" class="notif-badge hidden">0</span></button>
+    <button class="mobile-nav-btn" data-scroll="reelsCard" type="button" onclick="window.IG.navReels();return false;"><span class="nav-icon">R</span><span>Reels</span></button>
+    <button class="mobile-nav-btn" data-scroll="profileHero" type="button" onclick="window.IG.navProfile();return false;"><span class="nav-icon">@</span><span>Profile</span></button>
   </nav>
 
 
@@ -322,22 +322,26 @@
       <div class="post-viewer-body">
         <div id="postViewerMedia" class="post-viewer-media"></div>
         <div class="post-viewer-media-controls">
-          <button id="btnPostViewerMediaPrev" class="carousel-btn" type="button"><</button>
+          <button id="btnPostViewerMediaPrev" class="carousel-btn" type="button" onclick="window.IG.postMediaPrev();return false;"><</button>
           <span id="postViewerMediaCounter" class="carousel-counter">1/1</span>
-          <button id="btnPostViewerMediaNext" class="carousel-btn" type="button">></button>
+          <button id="btnPostViewerMediaNext" class="carousel-btn" type="button" onclick="window.IG.postMediaNext();return false;">></button>
         </div>
         <div id="postViewerMeta" class="post-viewer-meta"></div>
         <div class="post-viewer-controls">
-          <button id="btnPostViewerPrev" class="carousel-btn" type="button"><</button>
+          <button id="btnPostViewerPrev" class="carousel-btn" type="button" onclick="window.IG.postPrev();return false;"><</button>
           <span id="postViewerCounter" class="carousel-counter">1/1</span>
-          <button id="btnPostViewerNext" class="carousel-btn" type="button">></button>
+          <button id="btnPostViewerNext" class="carousel-btn" type="button" onclick="window.IG.postNext();return false;">></button>
         </div>
       </div>
     </div>
   </div>
-  <script src="/app.js?v=20260314g"></script>
+  <script src="/app.js?v=20260314r"></script>
 </body>
 </html>
+
+
+
+
 
 
 
