@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instagram</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/styles.css?v=20260314g" />
+</head>
+<body>
+  <header class="topbar" id="topHome">
+    <div class="topbar-inner">
+      <div class="brand">Instagram</div>
+      <div class="top-actions">
+        <button id="btnTheme" class="theme-btn" type="button" title="Promeni temu">DARK</button>
+        <button id="btnSound" class="theme-btn sound-btn" type="button" title="Zvuk notifikacija">SOUND ON</button>
+      </div>
+      <nav class="ig-nav" aria-label="Primary">
+        <button class="nav-btn" data-scroll="topHome" type="button"><span class="nav-icon">o</span><span>Home</span></button>
+        <button class="nav-btn" data-scroll="searchCard" type="button"><span class="nav-icon">Q</span><span>Search</span></button>
+        <button class="nav-btn nav-btn-badge" data-scroll="notificationsCard" type="button"><span class="nav-icon">*</span><span>Notifications</span> <span id="navNotifBadge" class="notif-badge hidden">0</span></button>
+        <button class="nav-btn" data-scroll="reelsCard" type="button"><span class="nav-icon">R</span><span>Reels</span></button>
+        <button class="nav-btn" data-scroll="profileHero" type="button"><span class="nav-icon">@</span><span>Profile</span></button>
+      </nav>
+      <div class="top-icons" aria-hidden="true">
+        <span class="icon-dot"></span>
+        <span class="icon-dot"></span>
+        <span class="icon-dot"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <p class="small">Gateway API: <span id="apiBaseLabel"></span></p>
+
+    <section class="profile-layout" id="profileExperience">
+      <div class="profile-main-col">
+        <section class="hero card" id="profileHero">
+          <div class="avatar" id="heroAvatar">IR</div>
+          <div class="hero-meta">
+            <div class="hero-top-row">
+              <h2 id="heroUsername">@demo_korisnik</h2>
+              <div class="hero-actions">
+                <button id="btnHeroFollow" class="hero-btn hero-btn-primary" type="button">Following</button>
+                <button id="btnHeroMessage" class="hero-btn" type="button">Message</button>
+                <button id="btnHeroEdit" class="hero-btn" type="button">Edit profile</button>
+                <button id="btnHeroMore" class="hero-btn hero-btn-icon" type="button" aria-label="More options">...</button>
+              </div>
+            </div>
+            <div class="hero-stats" id="heroStats">0 objava | 0 pratioca | 0 pratim</div>
+            <div class="hero-name" id="heroName">Instagram</div>
+            <div class="hero-bio" id="heroBio">Prijavi se da popunis svoj profil.</div>
+          </div>
+        </section>
+
+        <section class="card" id="storiesCard">
+          <h3>Stories</h3>
+          <div id="storyStrip" class="story-strip"></div>
+        </section>
+
+        <section class="card" id="highlightsCard">
+          <h3>Highlights</h3>
+          <div id="highlightStrip" class="story-strip"></div>
+        </section>
+
+        <section class="card profile-content" id="profileContentCard">
+          <div class="tabs" id="profileTabs">
+            <button class="tab-btn active" data-tab="posts" type="button">Posts</button>
+            <button class="tab-btn" data-tab="reels" type="button">Reels</button>
+            <button class="tab-btn" data-tab="saved" type="button">Saved</button>
+          </div>
+          <div id="profileGrid" class="profile-grid"></div>
+          <p id="profileGridMeta" class="small"></p>
+        </section>
+      </div>
+
+      <aside class="profile-side-col">
+        <section class="card side-card">
+          <h3>Predlozi za pracenje</h3>
+          <div id="sideSuggestions" class="side-list"><div class="small">Ucitavanje predloga...</div></div>
+        </section>
+
+        <section class="card side-card" id="sideRequestsCard">
+          <h3>Zahtevi za pracenje <span id="sideRequestsBadge" class="notif-badge hidden">0</span></h3>
+          <div id="sideRequestsList" class="side-list"><div class="small">Nema zahteva.</div></div>
+        </section>
+
+        <section class="card side-card">
+          <h3>Brzi demo</h3>
+          <div class="small">Klikni Seed demo data posle logina da automatski dobijes objave, reels i notifikacije.</div>
+        </section>
+      </aside>
+    </section>
+
+    <details id="toolsPanel" class="tools-panel">
+      <summary>Upravljanje nalogom i demo opcije</summary>
+      <section class="card" id="sessionCard">
+      <h2>Sesija i demo</h2>
+      <div class="row">
+        <div><button id="btnLogout">Logout</button></div>
+        <div><button id="btnResetDemo">Reset demo state</button></div>
+      </div>
+      <button id="btnSeedDemo">Seed demo data</button>
+      <div id="sessionInfo" class="small"></div>
+    </section>
+    </details>
+
+    <section id="authRow" class="auth-layout">
+      <aside class="auth-preview card" aria-hidden="true">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-story-strip">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="phone-post"></div>
+            <div class="phone-post-caption"></div>
+            <div class="phone-post"></div>
+          </div>
+        </div>
+        <p class="small">Prijavi se i pokreni demo feed sa objavama, reels i stories.</p>
+      </aside>
+
+      <div class="auth-panels">
+        <section class="card auth-card" id="loginCard">
+          <h2>Login</h2>
+          <input id="loginValue" placeholder="Email ili username" />
+          <input id="loginPassword" type="password" placeholder="Lozinka" />
+          <button id="btnLogin">Login</button>
+          <div class="row compact-row auth-demo-row">
+            <div><button id="btnUseMilica" class="secondary" type="button">Popuni Milica</button></div>
+            <div><button id="btnUseTamara" class="secondary" type="button">Popuni Tamara</button></div>
+            <div><button id="btnUseAleksandra" class="secondary" type="button">Popuni Aleksandra</button></div>
+            <div><button id="btnUseNatalija" class="secondary" type="button">Popuni Natalija</button></div>
+            <div><button id="btnUseMarija" class="secondary" type="button">Popuni Marija</button></div>
+          </div>
+          <p class="small">Demo nalozi: <code>milica@example.com / 123456</code>, <code>tamara@example.com / 123456</code>, <code>aleksandra@example.com / 123456</code>, <code>natalija@example.com / 123456</code>, <code>marija@example.com / 123456</code></p>
+        </section>
+
+        <section class="card auth-card" id="registerCard">
+          <h2>Registracija</h2>
+          <input id="regEmail" placeholder="Email" />
+          <input id="regUsername" placeholder="Username" />
+          <input id="regFullName" placeholder="Ime i prezime" />
+          <input id="regPassword" type="password" placeholder="Lozinka" />
+          <button id="btnRegister">Register</button>
+        </section>
+      </div>
+    </section>
+
+    <details id="toolsPanelExtras" class="tools-panel">
+      <summary>Dodatne demo opcije</summary>
+
+    <div class="row" id="profileControlsRow">
+      <section class="card" id="meProfileCard">
+        <h2>Moj profil</h2>
+        <input id="meFullName" placeholder="Ime i prezime" />
+        <textarea id="meBio" placeholder="Bio"></textarea>
+        <input id="meAvatarUrl" placeholder="URL profilne slike" />
+<input id="meAvatarFile" type="file" accept="image/*" />
+<p class="small">Ili izaberi sliku sa racunara pa klikni Sacuvaj profil.</p>
+        <label class="small"><input id="mePrivate" type="checkbox" /> Privatni profil</label>
+        <button id="btnSaveMe">Sacuvaj profil</button>
+        <button id="btnLoadMe">Ucitaj moj profil</button>
+        <div id="meStats" class="small"></div>
+      </section>
+
+      <section class="card" id="requestsCard">
+        <h2>Zahtevi za pracenje</h2>
+        <button id="btnLoadRequests">Ucitaj zahteve</button>
+        <div id="requestsList"></div>
+      </section>
+    </div>
+
+    <section class="card" id="searchCard">
+      <h2>Pretraga korisnika</h2>
+      <div class="search-toolbar">
+        <input id="searchInput" placeholder="Pretrazi profile i objave" />
+        <button id="btnSearch" class="search-btn" type="button">Search</button>
+      </div>
+      <div id="searchResults"></div>
+      <div class="search-suggested-block">
+        <h3>Predlozene objave</h3>
+        <div id="searchSuggestedPosts" class="search-suggested-grid"></div>
+      </div>
+    </section>
+
+    <section class="card" id="selectedProfileCard">
+      <h2>Pregled profila</h2>
+      <div id="selectedProfile" class="small">Nije izabran profil.</div>
+      <div id="selectedProfileActions" class="row compact-row selected-profile-actions"></div>
+      <div class="row selected-profile-social-row">
+        <div>
+          <h3>Followers</h3>
+          <div id="selectedFollowers"></div>
+        </div>
+        <div>
+          <h3>Following</h3>
+          <div id="selectedFollowing"></div>
+        </div>
+      </div>
+      <div class="search-suggested-block selected-posts-block">
+        <h3>Objave profila</h3>
+        <div id="selectedProfilePosts" class="search-suggested-grid"></div>
+      </div>
+    </section>
+
+    <section class="card hidden direct-drawer" id="directCard">
+      <div class="direct-drawer-head"><h2>Direct Messages</h2><button id="btnCloseDirect" class="hero-btn hero-btn-icon" type="button">x</button></div>
+      <div class="direct-layout">
+        <div class="direct-inbox-panel">
+          <h3>Inbox</h3>
+          <div id="directInboxList" class="direct-inbox-list">
+            <div class="small">Nema razgovora.</div>
+          </div>
+        </div>
+        <div class="direct-chat-panel">
+          <div id="directMeta" class="small">Izaberi profil i posalji poruku.</div>
+          <div id="directThread" class="direct-thread">
+            <div class="small">Nema otvorenog razgovora.</div>
+          </div>
+          <div class="direct-compose">
+            <textarea id="directMessageInput" placeholder="Posalji poruku..."></textarea>
+            <button id="btnSendDirect" type="button">Posalji poruku</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="createPostCard">
+      <h2>Kreiranje objave</h2>
+      <textarea id="postCaption" placeholder="Opis objave"></textarea>
+      <input id="postMediaUrl" placeholder="Media URL" />
+      <input id="postMediaFile" type="file" accept="image/*,video/*" />
+      <p class="small">Ako nemas URL, izaberi sliku ili video sa racunara.</p>
+      <input id="postMediaType" placeholder="image ili video" value="image" />
+      <input id="postMediaSize" placeholder="Velicina u MB" value="1.5" />
+      <button id="btnCreatePost">Kreiraj objavu</button>
+      <div id="createPostInfo" class="small"></div>
+    </section>
+
+    <section class="card" id="myPostsCard">
+      <h2>Moje objave</h2>
+      <div class="row compact-row">
+        <div><button id="btnLoadMyPosts">Ucitaj moje objave</button></div>
+        <div><button id="btnMyPostsAll" class="secondary" type="button">Sve</button></div>
+        <div><button id="btnMyPostsImages" class="secondary" type="button">Slike</button></div>
+        <div><button id="btnMyPostsVideos" class="secondary" type="button">Reels</button></div>
+      </div>
+      <div id="myPostsStatus" class="small"></div>
+      <div id="myPosts"></div>
+    </section>
+
+    <section class="card" id="notificationsCard">
+      <h2>Notifikacije</h2>
+      <div class="row">
+        <div><button id="btnLoadNotifications">Ucitaj notifikacije</button></div>
+        <div><button id="btnReadAllNotifications">Oznaci sve kao procitano</button></div>
+      </div>
+      <div id="notificationsMeta" class="small"></div>
+      <div id="notificationsList"></div>
+    </section>
+
+    <section class="card" id="feedCard">
+      <h2>Feed</h2>
+      <div class="row compact-row">
+        <div><button id="btnLoadFeed">Ucitaj feed</button></div>
+        <div><button id="btnFeedAll" class="secondary" type="button">Sve</button></div>
+        <div><button id="btnFeedImages" class="secondary" type="button">Slike</button></div>
+        <div><button id="btnFeedVideos" class="secondary" type="button">Reels</button></div>
+        <div><button id="btnToggleReelsMode" class="secondary" type="button">Reels mode: OFF</button></div>
+      </div>
+      <div id="feedStatus" class="small"></div>
+      <div id="feed"></div>
+    </section>
+
+    <section class="card" id="reelsCard">
+      <h2>Reels</h2>
+      <div id="reelsStatus" class="small"></div>
+      <div id="reelsFeed"></div>
+    </section>
+
+    <section class="card" id="logCard">
+      <h2>Log</h2>
+      <div class="row compact-row">
+        <div><button id="btnExportState">Preuzmi snapshot (JSON)</button></div>
+        <div><button id="btnClearLog" class="secondary" type="button">Ocisti log</button></div>
+      </div>
+      <pre id="log"></pre>
+    </section>
+    </details>
+    <button id="btnDirectFab" class="direct-fab" type="button" aria-label="Open direct">DM</button></main>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile">
+    <button class="mobile-nav-btn" data-scroll="topHome" type="button"><span class="nav-icon">o</span><span>Home</span></button>
+    <button class="mobile-nav-btn" data-scroll="searchCard" type="button"><span class="nav-icon">Q</span><span>Search</span></button>
+    <button class="mobile-nav-btn nav-btn-badge" data-scroll="notificationsCard" type="button"><span class="nav-icon">*</span><span>Notif</span> <span id="mobileNavNotifBadge" class="notif-badge hidden">0</span></button>
+    <button class="mobile-nav-btn" data-scroll="reelsCard" type="button"><span class="nav-icon">R</span><span>Reels</span></button>
+    <button class="mobile-nav-btn" data-scroll="profileHero" type="button"><span class="nav-icon">@</span><span>Profile</span></button>
+  </nav>
+
+
+  <div id="storyViewer" class="story-viewer hidden" aria-hidden="true">
+    <div class="story-viewer-backdrop" data-close-story-viewer="1"></div>
+    <div class="story-viewer-card">
+      <button id="btnCloseStoryViewer" class="story-viewer-close" data-close-story-viewer="1" type="button">X</button>
+      <div class="story-viewer-progress-track"><div id="storyViewerProgress" class="story-viewer-progress"></div></div>
+      <div class="story-viewer-nav">
+        <button id="btnStoryPrev" class="carousel-btn" type="button"><</button>
+        <span id="storyViewerCounter" class="carousel-counter">1/1</span>
+        <button id="btnStoryNext" class="carousel-btn" type="button">></button>
+      </div>
+      <div id="storyViewerMedia" class="story-viewer-media"></div>
+      <div id="storyViewerMeta" class="story-viewer-meta"></div>
+    </div>
+  </div>
+
+  <div id="postViewer" class="post-viewer hidden" aria-hidden="true">
+    <div class="post-viewer-backdrop" data-close-post-viewer="1"></div>
+    <div class="post-viewer-card">
+      <button id="btnClosePostViewer" class="story-viewer-close" data-close-post-viewer="1" type="button">X</button>
+      <div class="post-viewer-body">
+        <div id="postViewerMedia" class="post-viewer-media"></div>
+        <div class="post-viewer-media-controls">
+          <button id="btnPostViewerMediaPrev" class="carousel-btn" type="button"><</button>
+          <span id="postViewerMediaCounter" class="carousel-counter">1/1</span>
+          <button id="btnPostViewerMediaNext" class="carousel-btn" type="button">></button>
+        </div>
+        <div id="postViewerMeta" class="post-viewer-meta"></div>
+        <div class="post-viewer-controls">
+          <button id="btnPostViewerPrev" class="carousel-btn" type="button"><</button>
+          <span id="postViewerCounter" class="carousel-counter">1/1</span>
+          <button id="btnPostViewerNext" class="carousel-btn" type="button">></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/app.js?v=20260314g"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
