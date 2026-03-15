@@ -1,15 +1,4 @@
-﻿## Quickstart bez Docker-a (preporuceno za tvoj racunar sada)
-Ako Docker ne moze da se instalira zbog manjka prostora na `C:`, koristi lokalni quickstart:
-
-1. Pokreni `D:\Documents\instagram-replika\quickstart\start-local.bat`
-2. Otvori:
-- `http://localhost:3000`
-- `http://localhost:8080/health`
-
-Za gasenje pokreni `D:\Documents\instagram-replika\quickstart\stop-local.bat`.
-
-Napomena: quickstart koristi mock API (in-memory) da mozes odmah da radis frontend i funkcionalni flow.
-# Instagram Replika (Mikroservisna Aplikacija)
+﻿# Instagram Replika (Mikroservisna Aplikacija)
 
 Implementirana je mikroservisna aplikacija (backend + osnovni frontend) koja pokriva kljucne zahteve zadatka:
 - registracija/login/refresh/logout (JWT + refresh token)
@@ -84,14 +73,4 @@ docker compose up --build
 - PR workflow: sintaksna validacija service entrypoint-a
 - Main workflow: build image za svaki servis sa timestamp tag-om (`yyyymmdd-hhmmss`)
 
-## Sledeci koraci za punu predaju
-1. Dodati unit testove i pokrivenost >= 70%.
-2. Dodati API/UI integracione testove.
-3. Implementirati real upload fajlova u MinIO i vezu sa post-service.
-4. Ojacati gateway auth middleware (validacija JWT na svim protected rutama).
-5. Doterati frontend UX i kompletirati sve ekrane iz specifikacije.
 
-
-## Demo i predaja (quickstart)
-- Koraci demonstracije: `DEMO_CHECKLIST.md`
-- Export stanja: dugme `Preuzmi snapshot (JSON)` u sekciji `Log`
