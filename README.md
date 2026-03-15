@@ -1,6 +1,22 @@
-﻿# Instagram Replika
+# Instagram Replika
 
 Mikroservisna aplikacija koja simulira osnovne Instagram funkcionalnosti kroz odvojene servise za autentikaciju, korisnike, drustvene relacije, objave, engagement i feed.
+
+![Architecture](https://img.shields.io/badge/architecture-microservices-1d9bf0)
+![Frontend](https://img.shields.io/badge/frontend-JavaScript-111827)
+![Database](https://img.shields.io/badge/database-PostgreSQL-336791)
+![Containerization](https://img.shields.io/badge/containerization-Docker-2496ED)
+
+## Sadrzaj
+- [Funkcionalnosti](#funkcionalnosti)
+- [Arhitektura](#arhitektura)
+- [Pokretanje aplikacije](#pokretanje-aplikacije)
+- [Tok izvrsavanja funkcionalnosti](#tok-izvrsavanja-funkcionalnosti)
+- [Glavne gateway rute](#glavne-gateway-rute)
+- [Baza](#baza)
+- [CI](#ci)
+- [Moguca unapredjenja](#moguca-unapredjenja)
+- [Clanovi tima i uloge](#clanovi-tima-i-uloge)
 
 ## Funkcionalnosti
 - registracija, login, refresh i logout uz JWT i refresh token
@@ -13,6 +29,8 @@ Mikroservisna aplikacija koja simulira osnovne Instagram funkcionalnosti kroz od
 - pretraga korisnika po imenu i username-u uz filtriranje blokiranih profila
 
 ## Arhitektura
+
+Projekat je organizovan kao skup zasebnih servisa sa jasno podeljenim odgovornostima. Frontend komunicira sa sistemom preko `gateway-service`, koji prosledjuje zahteve odgovarajucim backend servisima.
 
 ### Servisi
 - `gateway-service` (`:8080`)
@@ -37,6 +55,8 @@ docker compose up --build
 ```
 
 Frontend je dostupan na: `http://localhost:3000`
+
+Za lokalno pokretanje potrebno je da Docker servis bude aktivan i da su potrebni portovi slobodni.
 
 ## Tok izvrsavanja funkcionalnosti
 - korisnik se registruje ili prijavljuje preko `auth-service`
@@ -82,6 +102,8 @@ Frontend je dostupan na: `http://localhost:3000`
 ## Baza
 - `db/schema.sql`
 - `db/seed.sql`
+
+SQL skripte definisu osnovnu strukturu podataka i demo podatke potrebne za inicijalno testiranje aplikacije.
 
 ## CI
 - PR workflow: sintaksna validacija service entrypoint-a
