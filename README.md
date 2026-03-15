@@ -1,37 +1,51 @@
-﻿# Instagram Replika (Mikroservisna Aplikacija)
+﻿# Instagram Replika
 
-Implementirana je mikroservisna aplikacija (backend + osnovni frontend) koja pokriva kljucne zahteve zadatka:
-- registracija/login/refresh/logout (JWT + refresh token)
-- public/private profili
-- follow i follow request (pending/accept/reject)
+Mikroservisna aplikacija koja simulira osnovne Instagram funkcionalnosti kroz odvojene servise za autentikaciju, korisnike, drustvene relacije, objave, engagement i feed.
+
+## Funkcionalnosti
+- registracija, login, refresh i logout uz JWT i refresh token
+- javni i privatni profili
+- follow i follow request tokovi (`pending`, `accept`, `reject`)
 - blokiranje korisnika i prekid follow relacija nakon bloka
-- objave sa karuselom (max 20), validacija media tipa i velicine (max 50MB)
-- like/unlike i komentari (create/update/delete)
-- feed (objave profila koje korisnik prati)
-- pretraga korisnika po imenu/username uz filtriranje blokiranih
+- objave sa vise medija i validacijom tipa i velicine fajla
+- like / unlike i komentari
+- personalizovani feed
+- pretraga korisnika po imenu i username-u uz filtriranje blokiranih profila
 
-## Servisi
-- gateway-service (`:8080`)
-- frontend-service (`:3000`)
-- auth-service (`:8081`)
-- user-service (`:8082`)
-- social-service (`:8083`)
-- post-service (`:8084`)
-- engagement-service (`:8085`)
-- feed-service (`:8086`)
-- media-service (`:8087`)
+## Arhitektura
 
-Infra:
+### Servisi
+- `gateway-service` (`:8080`)
+- `frontend-service` (`:3000`)
+- `auth-service` (`:8081`)
+- `user-service` (`:8082`)
+- `social-service` (`:8083`)
+- `post-service` (`:8084`)
+- `engagement-service` (`:8085`)
+- `feed-service` (`:8086`)
+- `media-service` (`:8087`)
+
+### Infrastruktura
 - PostgreSQL
-- RabbitMQ (placeholder)
-- MinIO (placeholder)
+- RabbitMQ (`placeholder`)
+- MinIO (`placeholder`)
 
-Frontend URL: `http://localhost:3000`
+## Pokretanje aplikacije
 
-## Pokretanje
 ```bash
 docker compose up --build
 ```
+
+Frontend je dostupan na: `http://localhost:3000`
+
+## Tok izvrsavanja funkcionalnosti
+- korisnik se registruje ili prijavljuje preko `auth-service`
+- gateway prosledjuje zahteve odgovarajucim servisima
+- `user-service` upravlja podacima o profilima
+- `social-service` obradjuje follow, follow request i blokiranje
+- `post-service` upravlja objavama i medijskim stavkama
+- `engagement-service` obradjuje lajkove i komentare
+- `feed-service` sastavlja korisnikov feed na osnovu relacija pracenja
 
 ## Glavne gateway rute
 - `POST /api/auth/register`
@@ -73,11 +87,14 @@ docker compose up --build
 - PR workflow: sintaksna validacija service entrypoint-a
 - Main workflow: build image za svaki servis sa timestamp tag-om (`yyyymmdd-hhmmss`)
 
+## Moguca unapredjenja
+- potpuna integracija upload servisa sa trajnim skladistenjem fajlova
+- prosirenje automatizovanih testova
+- dodatno unapredjenje UI i UX tokova
+
 ## Clanovi tima i uloge
 - Milica Kostic - backend engineer A, razvoj poslovne logike, definisanje modela podataka, integracija servisa, CI, Docker konfiguracija i priprema projekta za demonstraciju
 - Aleksandra Acimovic - frontend engineer, razvoj i dorada grafickog korisnickog interfejsa
 - Tamara Majdak - backend engineer B, razvoj poslovne logike i API integracioni testovi
 - Natalija Ristovic - backend engineer C, razvoj poslovne logike i UI integracioni testovi
 - Marija Stevic - validacija funkcionalnosti, priprema demonstracionih scenarija i projektna dokumentacija
-
-
