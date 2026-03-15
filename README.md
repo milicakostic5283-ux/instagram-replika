@@ -73,4 +73,11 @@ docker compose up --build
 - PR workflow: sintaksna validacija service entrypoint-a
 - Main workflow: build image za svaki servis sa timestamp tag-om (`yyyymmdd-hhmmss`)
 
+## Clanovi tima i uloge
+- Milica Kostic - backend engineer A, razvoj poslovne logike, definisanje modela podataka, integracija servisa, CI, Docker konfiguracija i priprema projekta za demonstraciju
+- Aleksandra Acimovic - frontend engineer, razvoj i dorada grafickog korisnickog interfejsa
+- Tamara Majdak - backend engineer B, razvoj poslovne logike i API integracioni testovi
+- Natalija Ristovic - backend engineer C, razvoj poslovne logike i UI integracioni testovi
+- Marija Stevic - validacija funkcionalnosti, priprema demonstracionih scenarija i projektna dokumentacija
+
 
