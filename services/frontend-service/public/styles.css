@@ -1,4 +1,4 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Pacifico&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
 :root {
   --bg: #f7f8fb;
@@ -4521,12 +4521,12 @@ body.direct-open #profileExperience {
 .search-user-card strong,
 .search-user-card .small,
 .search-user-card div {
-  color: #0f172a !important;
+  color: #f8fafc !important;
 }
 
 .search-user-card {
-  background: #ffffff !important;
-  border: 1px solid #dbe4f0 !important;
+  background: #111827 !important;
+  border: 1px solid #23324a !important;
 }
 
 #feed .post-card button,
@@ -4725,4 +4725,135 @@ body.direct-open #profileExperience {
 #directCard.hidden,
 #directCard.direct-drawer.hidden {
   display: none !important;
+}
+
+/* final hard override 20260315a */
+#searchInput,
+#searchCard input,
+#searchCard textarea {
+  background: #0f172a !important;
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+  caret-color: #f8fafc !important;
+  opacity: 1 !important;
+}
+
+#searchInput::placeholder,
+#searchCard input::placeholder,
+#searchCard textarea::placeholder {
+  color: #cbd5e1 !important;
+  opacity: 1 !important;
+}
+
+#directCard,
+#directCard.direct-drawer {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  transform: none !important;
+  margin-top: 16px !important;
+  z-index: 1 !important;
+}
+
+#directCard .direct-layout {
+  grid-template-columns: 220px minmax(0, 1fr) !important;
+  gap: 12px !important;
+}
+
+#directCard .direct-inbox-list {
+  max-height: 260px !important;
+  overflow: auto !important;
+}
+
+#directCard .direct-thread {
+  min-height: 180px !important;
+  max-height: 260px !important;
+  overflow: auto !important;
+}
+
+#directCard .direct-compose {
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: end !important;
+}
+
+#directCard .direct-compose textarea {
+  min-height: 88px !important;
+  max-height: 120px !important;
+}
+
+/* safe search/block dark patch 20260315b */
+#searchResults .search-user-card,
+#searchResults article.search-user-card {
+  background: #111827 !important;
+  border: 1px solid #23324a !important;
+  box-shadow: none !important;
+}
+
+#searchResults .search-user-card,
+#searchResults .search-user-card strong,
+#searchResults .search-user-card div,
+#searchResults .search-user-card .small,
+#searchResults .search-user-card button {
+  color: #f8fafc !important;
+}
+
+#searchResults .search-user-card .small:last-child {
+  color: #cbd5e1 !important;
+}
+
+#searchResults .search-user-card .secondary {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+#searchInput,
+#searchInput::placeholder {
+  color: #f8fafc !important;
+}
+
+.blocked-users-block {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 20px;
+  background: #111827;
+  border: 1px solid #23324a;
+}
+
+.blocked-users-block h3 {
+  margin: 0 0 12px;
+  color: #f8fafc;
+}
+
+#blockedUsersList {
+  display: grid;
+  gap: 10px;
+}
+
+.blocked-user-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #0f172a;
+  border: 1px solid #23324a;
+}
+
+.blocked-user-copy strong {
+  color: #f8fafc;
+}
+
+.blocked-user-copy .small {
+  color: #cbd5e1;
 }
