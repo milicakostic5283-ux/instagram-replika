@@ -38,6 +38,7 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === "GET" && (url.pathname === "/feed" || url.pathname === "/")) {
       const currentId = meId(req, url);
+      const limit = Number(url.searchParams.get("limit") || 100);
 
       const q = await pool.query(
         `SELECT p.id AS post_id,
@@ -59,8 +60,8 @@ const server = http.createServer(async (req, res) => {
               OR (b.blocker_id = p.author_id AND b.blocked_id = $1)
          )
          ORDER BY p.created_at DESC
-         LIMIT 100`,
-        [currentId]
+         LIMIT $2`,
+        [currentId, limit]
       );
 
       const items = [];
@@ -73,6 +74,7 @@ const server = http.createServer(async (req, res) => {
           [row.post_id]
         );
         items.push({
+          isEdited: row.updated_at !== row.created_at,
           postId: row.post_id,
           authorId: row.author_id,
           authorUsername: row.author_username,
