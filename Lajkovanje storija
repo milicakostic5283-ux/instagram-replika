@@ -1,0 +1,23 @@
+@app.route('/stories/<int:story_id>/like', methods=['POST'])
+def like_story(story_id):
+    user_id = request.json['user_id']
+
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO story_likes (story_id, user_id)
+        VALUES (?, ?)
+    """, (story_id, user_id))
+
+    # Notifikacija
+    cursor.execute("""
+        INSERT INTO notifications (user_id, message)
+        SELECT user_id, 'Neko je lajkovao tvoju priču'
+        FROM stories WHERE id=?
+    """, (story_id,))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Lajkovano"})
