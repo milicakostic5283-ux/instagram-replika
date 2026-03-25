@@ -49,7 +49,7 @@ describe("Gateway API integration", () => {
   });
 
   test("follow public user and create post", async () => {
-    const follow = await request("/api/social/follow/1", {
+    const follow = await request("/api/social/follow/4", {
       method: "POST",
       headers: { "X-User-Id": String(userId) }
     });

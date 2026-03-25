@@ -4857,3 +4857,17 @@ body.direct-open #profileExperience {
 .blocked-user-copy .small {
   color: #cbd5e1;
 }
+
+/* blocked/search contrast patch 20260323a */
+#blockedUsersList .secondary,
+#blockedUsersList button.secondary,
+#searchResults .secondary,
+#searchCard .secondary {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+#blockedUsersList .blocked-user-card {
+  background: #0f172a !important;
+}
