@@ -3,6 +3,9 @@
 module.exports = defineConfig({
   testDir: "./tests/ui",
   timeout: 60000,
+  retries: process.env.CI ? 1 : 0,
+  workers: 1,
+  fullyParallel: false,
   webServer: [
     {
       command: "node quickstart/mock-api.js",

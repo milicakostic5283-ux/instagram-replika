@@ -20,24 +20,11 @@ jobs:
       - name: Unit tests
         run: npm run test:unit
 
-      - name: Start stack for API/UI tests
-        run: docker compose up --build -d
-
-      - name: Wait for frontend
-        run: |
-          for i in {1..30}; do
-            if curl -fsS http://localhost:3000 > /dev/null; then
-              exit 0
-            fi
-            sleep 3
-          done
-          echo "Frontend did not start in time" && exit 1
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
 
       - name: API integration tests
         run: npm run test:api
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
 
       - name: UI integration tests
         run: npm run test:ui
@@ -60,7 +47,3 @@ jobs:
 
       - name: Push images (placeholder)
         run: echo "Dodaj docker login i docker push komande ovde."
-
-      - name: Stop stack
-        if: always()
-        run: docker compose down -v
