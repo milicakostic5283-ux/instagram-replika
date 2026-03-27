@@ -4871,3 +4871,27 @@ body.direct-open #profileExperience {
 #blockedUsersList .blocked-user-card {
   background: #0f172a !important;
 }
+
+button.secondary,
+.post-card button.secondary,
+.post-comment-item button.secondary,
+.blocked-user-card button.secondary,
+#searchResults button.secondary,
+#searchCard button.secondary,
+#selectedProfileCard button.secondary,
+#feed .secondary,
+#myPosts .secondary,
+#reelsFeed .secondary {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
+  opacity: 1 !important;
+}
+
+#feed .post-card button,
+#myPosts .post-card button,
+#reelsFeed .post-card button,
+#searchSuggestedPosts .post-card button,
+#selectedProfilePosts .post-card button {
+  color: #f8fafc !important;
+}

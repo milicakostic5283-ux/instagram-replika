@@ -5,7 +5,9 @@ const PORT = 8081;
 
 let userSeq = 13;
 let postSeq = 1;
+let storySeq = 1;
 let commentSeq = 1;
+let storyCommentSeq = 1;
 let notifSeq = 1;
 
 const initialUsers = [
@@ -24,8 +26,11 @@ let users = initialUsers.map((u) => ({ ...u }));
 const follows = new Map(); // key: follower:following => status accepted|pending
 const blocks = new Set(); // blocker:blocked
 const posts = [];
+const stories = [];
 const likes = new Set(); // user:post
+const storyLikes = new Set(); // user:story
 const comments = [];
+const storyComments = [];
 const notifications = [];
 
 function json(res, status, data) {
@@ -83,24 +88,61 @@ function pushNotification(userId, type, text) {
   });
 }
 
+function nowIso() {
+  return new Date().toISOString();
+}
+
+function purgeExpiredStories() {
+  const now = Date.now();
+  for (let i = stories.length - 1; i >= 0; i -= 1) {
+    if (new Date(stories[i].expiresAt).getTime() <= now) {
+      const storyId = stories[i].id;
+      stories.splice(i, 1);
+      for (const key of Array.from(storyLikes)) {
+        if (Number(String(key).split(":")[1]) === storyId) storyLikes.delete(key);
+      }
+      for (let j = storyComments.length - 1; j >= 0; j -= 1) {
+        if (storyComments[j].storyId === storyId) storyComments.splice(j, 1);
+      }
+    }
+  }
+}
+
+function activeStories() {
+  purgeExpiredStories();
+  return stories.slice();
+}
+
 function resetState() {
   userSeq = 13;
   postSeq = 1;
+  storySeq = 1;
   commentSeq = 1;
+  storyCommentSeq = 1;
   notifSeq = 1;
 
   users.splice(0, users.length, ...initialUsers.map((u) => ({ ...u })));
   follows.clear();
   blocks.clear();
   posts.splice(0, posts.length);
+  stories.splice(0, stories.length);
   likes.clear();
+  storyLikes.clear();
   comments.splice(0, comments.length);
+  storyComments.splice(0, storyComments.length);
   notifications.splice(0, notifications.length);
 }
 function makePostView(p) {
   const likesCount = Array.from(likes).filter(x => Number(x.split(":")[1]) === p.id).length;
   const commentsCount = comments.filter(c => c.postId === p.id).length;
   return { ...p, likesCount, commentsCount };
+}
+
+function makeStoryView(s) {
+  const likesCount = Array.from(storyLikes).filter(x => Number(x.split(":")[1]) === s.id).length;
+  const commentsCount = storyComments.filter(c => c.storyId === s.id).length;
+  const remainingMs = Math.max(0, new Date(s.expiresAt).getTime() - Date.now());
+  return { ...s, likesCount, commentsCount, remainingMinutes: Math.ceil(remainingMs / 60000) };
 }
 
 const server = http.createServer(async (req, res) => {
@@ -115,7 +157,7 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, { ok: true, message: "State resetovan" });
     }
 
-        if (req.method === "POST" && url.pathname === "/api/dev/seed") {
+    if (req.method === "POST" && url.pathname === "/api/dev/seed") {
       const viewerId = meId(req, url);
       const viewer = users.find((u) => u.id === viewerId) || users[0];
 
@@ -235,6 +277,122 @@ const server = http.createServer(async (req, res) => {
         });
         pushNotification(viewer.id, "new_like", `@${target.username} je lajkovao tvoju objavu #${p.id}`);
         pushNotification(viewer.id, "new_comment", `@${target.username} je komentarisao tvoju objavu #${p.id}`);
+      });
+
+      const aleksandraStoryUser = users.find((u) => u.username === "aleksandra") || target;
+      const marijaStoryUser = users.find((u) => u.username === "marija") || third;
+
+      const sampleStories = [
+        {
+          authorId: target.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-target-1/1080/1920",
+          durationMinutes: 90,
+          caption: "Story iz centra grada",
+          createdAt: new Date(now - 25 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: target.id,
+          media_type: "video",
+          media_url: "https://samplelib.com/lib/preview/mp4/sample-20s.mp4",
+          durationMinutes: 120,
+          caption: "Kratki video story",
+          createdAt: new Date(now - 20 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: target.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-target-2/1080/1920",
+          durationMinutes: 75,
+          caption: "Kafa i jutarnji vibe",
+          createdAt: new Date(now - 16 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: target.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-target-3/1080/1920",
+          durationMinutes: 50,
+          caption: "Fit check pre izlaska",
+          createdAt: new Date(now - 11 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: target.id,
+          media_type: "video",
+          media_url: "https://samplelib.com/lib/preview/mp4/sample-30s.mp4",
+          durationMinutes: 45,
+          caption: "Mini reel u story formatu",
+          createdAt: new Date(now - 7 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: third.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-third-1/1080/1920",
+          durationMinutes: 60,
+          caption: "Popodnevni story",
+          createdAt: new Date(now - 18 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: third.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-third-2/1080/1920",
+          durationMinutes: 55,
+          caption: "Backstage detalj",
+          createdAt: new Date(now - 13 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: third.id,
+          media_type: "video",
+          media_url: "https://filesamples.com/samples/video/mp4/sample_960x400_ocean_with_audio.mp4",
+          durationMinutes: 40,
+          caption: "Vecernji story video",
+          createdAt: new Date(now - 8 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: aleksandraStoryUser.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-aleksandra-1/1080/1920",
+          durationMinutes: 70,
+          caption: "Mirror selfie pre izlaska",
+          createdAt: new Date(now - 17 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: aleksandraStoryUser.id,
+          media_type: "video",
+          media_url: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
+          durationMinutes: 35,
+          caption: "Brzi story update",
+          createdAt: new Date(now - 6 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: marijaStoryUser.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-marija-1/1080/1920",
+          durationMinutes: 80,
+          caption: "Beauty corner",
+          createdAt: new Date(now - 21 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: marijaStoryUser.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-marija-2/1080/1920",
+          durationMinutes: 50,
+          caption: "Novi highlight trenutak",
+          createdAt: new Date(now - 9 * 60 * 1000).toISOString()
+        }
+      ];
+
+      sampleStories.forEach((ss) => {
+        const createdAt = new Date(ss.createdAt);
+        stories.push({
+          id: storySeq++,
+          authorId: ss.authorId,
+          media_type: ss.media_type,
+          media_url: ss.media_url,
+          caption: ss.caption,
+          durationMinutes: ss.durationMinutes,
+          createdAt: createdAt.toISOString(),
+          expiresAt: new Date(createdAt.getTime() + ss.durationMinutes * 60000).toISOString()
+        });
       });
 
       return json(res, 200, { ok: true, seededPostIds: createdIds, totalPosts: createdIds.length });
@@ -454,6 +612,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "GET" && url.pathname === "/api/export/state") {
       const viewerId = meId(req, url);
+      purgeExpiredStories();
       const snapshot = {
         generatedAt: new Date().toISOString(),
         viewerId,
@@ -461,11 +620,113 @@ const server = http.createServer(async (req, res) => {
         follows: Array.from(follows.entries()).map(([key, status]) => ({ key, status })),
         blocks: Array.from(blocks.values()),
         posts,
+        stories,
         likes: Array.from(likes.values()),
+        storyLikes: Array.from(storyLikes.values()),
         comments,
+        storyComments,
         notifications: notifications.filter(n => n.userId === viewerId)
       };
       return json(res, 200, snapshot);
+    }
+    // stories
+    if (req.method === "POST" && url.pathname === "/api/stories") {
+      const viewerId = meId(req, url);
+      const body = await readBody(req);
+      const mediaType = String(body.type || body.mediaType || "").toLowerCase();
+      const mediaUrl = String(body.url || body.mediaUrl || "").trim();
+      const durationMinutes = Number(body.durationMinutes || body.duration || 0);
+      const caption = String(body.caption || "");
+      if (!["image", "video"].includes(mediaType)) return json(res, 400, { error: "Story mora biti image ili video" });
+      if (!mediaUrl) return json(res, 400, { error: "Story mora imati media URL" });
+      if (!Number.isFinite(durationMinutes) || durationMinutes <= 0) return json(res, 400, { error: "Trajanje price mora biti pozitivan broj minuta" });
+      purgeExpiredStories();
+      const activeMine = stories.filter((s) => s.authorId === viewerId);
+      if (activeMine.length >= 5) return json(res, 400, { error: "Dozvoljeno je maksimalno 5 aktivnih story stavki" });
+      const createdAt = new Date();
+      const story = {
+        id: storySeq++,
+        authorId: viewerId,
+        media_type: mediaType,
+        media_url: mediaUrl,
+        caption,
+        durationMinutes,
+        createdAt: createdAt.toISOString(),
+        expiresAt: new Date(createdAt.getTime() + durationMinutes * 60000).toISOString()
+      };
+      stories.push(story);
+      return json(res, 201, makeStoryView(story));
+    }
+
+    if (req.method === "GET" && url.pathname === "/api/stories/feed") {
+      const viewerId = meId(req, url);
+      const followingAccepted = Array.from(follows.entries())
+        .filter(([k, status]) => status === "accepted" && Number(k.split(":")[0]) === viewerId)
+        .map(([k]) => Number(k.split(":")[1]));
+      const items = activeStories()
+        .filter((s) => followingAccepted.includes(s.authorId) && !isBlocked(viewerId, s.authorId))
+        .sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)))
+        .map((s) => {
+          const author = users.find((u) => u.id === s.authorId);
+          return {
+            ...makeStoryView(s),
+            authorUsername: author?.username || "unknown",
+            authorFullName: author?.full_name || "",
+            authorAvatarUrl: author?.avatar_url || ""
+          };
+        });
+      return json(res, 200, { items });
+    }
+
+    if (req.method === "GET" && url.pathname === "/api/stories") {
+      const viewerId = meId(req, url);
+      const authorId = Number(url.searchParams.get("authorId") || 0);
+      let list = activeStories();
+      if (authorId > 0) list = list.filter((s) => s.authorId === authorId);
+      list = list.filter((s) => canSeeUser(viewerId, s.authorId));
+      return json(res, 200, {
+        items: list
+          .sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)))
+          .map((s) => {
+            const author = users.find((u) => u.id === s.authorId);
+            return {
+              ...makeStoryView(s),
+              authorUsername: author?.username || "unknown",
+              authorFullName: author?.full_name || "",
+              authorAvatarUrl: author?.avatar_url || ""
+            };
+          })
+      });
+    }
+
+    const storyById = url.pathname.match(/^\/api\/stories\/(\d+)$/);
+    if (storyById) {
+      const id = Number(storyById[1]);
+      const viewerId = meId(req, url);
+      const story = activeStories().find((x) => x.id === id);
+      if (!story) return json(res, 404, { error: "Story nije pronadjen ili je istekao" });
+      if (!canSeeUser(viewerId, story.authorId)) return json(res, 403, { error: "Nemate pristup ovom story-ju" });
+      if (req.method === "GET") {
+        const author = users.find((u) => u.id === story.authorId);
+        return json(res, 200, {
+          ...makeStoryView(story),
+          authorUsername: author?.username || "unknown",
+          authorFullName: author?.full_name || "",
+          authorAvatarUrl: author?.avatar_url || ""
+        });
+      }
+      if (req.method === "DELETE") {
+        if (story.authorId !== viewerId) return json(res, 403, { error: "Samo autor brise story" });
+        const idx = stories.findIndex((x) => x.id === id);
+        if (idx >= 0) stories.splice(idx, 1);
+        for (const key of Array.from(storyLikes)) {
+          if (Number(String(key).split(":")[1]) === id) storyLikes.delete(key);
+        }
+        for (let j = storyComments.length - 1; j >= 0; j -= 1) {
+          if (storyComments[j].storyId === id) storyComments.splice(j, 1);
+        }
+        return json(res, 200, { deleted: true, storyId: id });
+      }
     }
     // posts
     if (req.method === "POST" && url.pathname === "/api/posts") {
@@ -612,6 +873,81 @@ const server = http.createServer(async (req, res) => {
       if (req.method === "DELETE") {
         const i = comments.findIndex(x => x.id === id);
         comments.splice(i, 1);
+        return json(res, 200, { deleted: true, id });
+      }
+    }
+
+    const storyLikeRoute = url.pathname.match(/^\/api\/engagement\/stories\/(\d+)\/like$/);
+    if (storyLikeRoute) {
+      const storyId = Number(storyLikeRoute[1]);
+      const viewerId = meId(req, url);
+      const story = activeStories().find((x) => x.id === storyId);
+      if (!story) return json(res, 404, { error: "Story nije pronadjen ili je istekao" });
+      if (!canSeeUser(viewerId, story.authorId)) return json(res, 403, { error: "Nemate dozvolu za ovu akciju" });
+      const key = `${viewerId}:${storyId}`;
+      if (req.method === "POST") {
+        storyLikes.add(key);
+        if (story.authorId !== viewerId) {
+          pushNotification(
+            story.authorId,
+            "story_like",
+            `@${users.find(u => u.id === viewerId)?.username || viewerId} je lajkovao tvoj story #${storyId}`
+          );
+        }
+        return json(res, 201, { liked: true, storyId, meId: viewerId, likesCount: Array.from(storyLikes).filter(k => Number(k.split(":")[1]) === storyId).length });
+      }
+      if (req.method === "DELETE") {
+        storyLikes.delete(key);
+        return json(res, 200, { liked: false, storyId, meId: viewerId, likesCount: Array.from(storyLikes).filter(k => Number(k.split(":")[1]) === storyId).length });
+      }
+    }
+
+    const storyCommentsRoute = url.pathname.match(/^\/api\/engagement\/stories\/(\d+)\/comments$/);
+    if (storyCommentsRoute) {
+      const storyId = Number(storyCommentsRoute[1]);
+      const viewerId = meId(req, url);
+      const story = activeStories().find((x) => x.id === storyId);
+      if (!story) return json(res, 404, { error: "Story nije pronadjen ili je istekao" });
+      if (!canSeeUser(viewerId, story.authorId)) return json(res, 403, { error: "Nemate dozvolu za ovu akciju" });
+      if (req.method === "GET") {
+        const items = storyComments
+          .filter((c) => c.storyId === storyId)
+          .map((c) => ({ ...c, authorUsername: users.find((u) => u.id === c.authorId)?.username || "unknown" }));
+        return json(res, 200, { items });
+      }
+      if (req.method === "POST") {
+        const body = await readBody(req);
+        const text = String(body.text || "").trim();
+        if (!text) return json(res, 400, { error: "text je obavezan" });
+        const c = { id: storyCommentSeq++, storyId, authorId: viewerId, text, createdAt: nowIso(), updatedAt: nowIso() };
+        storyComments.push(c);
+        if (story.authorId !== viewerId) {
+          pushNotification(
+            story.authorId,
+            "story_comment",
+            `@${users.find(u => u.id === viewerId)?.username || viewerId} je komentarisao tvoj story #${storyId}`
+          );
+        }
+        return json(res, 201, c);
+      }
+    }
+
+    const storyCommentById = url.pathname.match(/^\/api\/engagement\/story-comments\/(\d+)$/);
+    if (storyCommentById) {
+      const id = Number(storyCommentById[1]);
+      const viewerId = meId(req, url);
+      const c = storyComments.find((x) => x.id === id);
+      if (!c) return json(res, 404, { error: "Story komentar nije pronadjen" });
+      if (c.authorId !== viewerId) return json(res, 403, { error: "Samo autor menja/brise komentar" });
+      if (req.method === "PATCH") {
+        const body = await readBody(req);
+        c.text = String(body.text || c.text);
+        c.updatedAt = nowIso();
+        return json(res, 200, c);
+      }
+      if (req.method === "DELETE") {
+        const i = storyComments.findIndex((x) => x.id === id);
+        storyComments.splice(i, 1);
         return json(res, 200, { deleted: true, id });
       }
     }

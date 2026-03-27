@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Instagram</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="stylesheet" href="/styles.css?v=20260325e" />
+  <link rel="stylesheet" href="/styles.css?v=20260327b" />
 </head>
 <body>
   <header class="topbar" id="topHome">
@@ -243,6 +243,23 @@
       <div id="createPostInfo" class="small"></div>
     </section>
 
+    <section class="card" id="createStoryCard">
+      <h2>Kreiranje story objave</h2>
+      <textarea id="storyCaption" placeholder="Opis story objave"></textarea>
+      <input id="storyMediaUrl" placeholder="Story media URL" />
+      <input id="storyMediaFile" type="file" accept="image/*,video/*" />
+      <p class="small">Moze slika ili video. Maksimalno 5 aktivnih story stavki po korisniku.</p>
+      <input id="storyMediaType" placeholder="image ili video" value="image" />
+      <input id="storyDuration" type="number" min="1" step="1" placeholder="Trajanje u minutima" value="60" />
+      <button id="btnCreateStory" type="button">Objavi story</button>
+      <div id="createStoryInfo" class="small"></div>
+      <div id="storyCreateMeta" class="small"></div>
+      <div class="search-suggested-block selected-posts-block">
+        <h3>Moje aktivne price</h3>
+        <div id="myStoriesList"></div>
+      </div>
+    </section>
+
     <section class="card" id="myPostsCard">
       <h2>Moje objave</h2>
       <div class="row compact-row">
@@ -316,6 +333,14 @@
       </div>
       <div id="storyViewerMedia" class="story-viewer-media"></div>
       <div id="storyViewerMeta" class="story-viewer-meta"></div>
+      <div class="row compact-row">
+        <div><button id="btnStoryLike" type="button">Like story</button></div>
+      </div>
+      <div id="storyViewerComments" class="post-comments-wrap"></div>
+      <div class="comment-compose">
+        <input id="storyCommentInput" type="text" placeholder="Dodaj komentar na story" />
+        <button id="btnStoryComment" type="button">Posalji</button>
+      </div>
     </div>
   </div>
 
@@ -340,7 +365,7 @@
       </div>
     </div>
   </div>
-  <script src="/app.js?v=20260325e"></script>
+  <script src="/app.js?v=20260327b"></script>
 </body>
 </html>
 
