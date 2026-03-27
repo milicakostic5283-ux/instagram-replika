@@ -87,20 +87,20 @@
 
         <section class="card side-card">
           <h3>Brzi pristup</h3>
-          <div class="small">Posle logina ucitaj podatke da automatski dobijes objave, reels i notifikacije.</div>
+          <div class="small">Posle logina ucitaj sadrzaj da automatski dobijes objave, reels, price i notifikacije.</div>
         </section>
       </aside>
     </section>
 
     <details id="toolsPanel" class="tools-panel">
-      <summary>Upravljanje nalogom i opcije</summary>
+      <summary>Upravljanje nalogom i sadrzajem</summary>
       <section class="card" id="sessionCard">
       <h2>Sesija</h2>
       <div class="row">
         <div><button id="btnLogout">Logout</button></div>
-        <div><button id="btnResetDemo">Resetuj stanje</button></div>
+        <div><button id="btnResetDemo">Resetuj sadrzaj</button></div>
       </div>
-      <button id="btnSeedDemo">Ucitaj podatke</button>
+      <button id="btnSeedDemo">Ucitaj sadrzaj</button>
       <div id="sessionInfo" class="small"></div>
     </section>
     </details>
@@ -244,18 +244,18 @@
     </section>
 
     <section class="card" id="createStoryCard">
-      <h2>Kreiranje story objave</h2>
-      <textarea id="storyCaption" placeholder="Opis story objave"></textarea>
-      <input id="storyMediaUrl" placeholder="Story media URL" />
+      <h2>Kreiranje price i highlight-a</h2>
+      <textarea id="storyCaption" placeholder="Opis price ili highlight-a"></textarea>
+      <input id="storyMediaUrl" placeholder="Media URL" />
       <input id="storyMediaFile" type="file" accept="image/*,video/*" />
-      <p class="small">Moze slika ili video. Maksimalno 5 aktivnih story stavki po korisniku.</p>
+      <p class="small">Moze slika ili video. Maksimalno 5 aktivnih stavki po korisniku.</p>
       <select id="storyKind">
         <option value="story">Story</option>
         <option value="highlight">Highlight</option>
       </select>
       <input id="storyMediaType" placeholder="image ili video" value="image" />
       <input id="storyDuration" type="number" min="1" step="1" placeholder="Trajanje u minutima" value="60" />
-      <button id="btnCreateStory" type="button">Objavi story</button>
+      <button id="btnCreateStory" type="button">Objavi stavku</button>
       <div id="createStoryInfo" class="small"></div>
       <div id="storyCreateMeta" class="small"></div>
       <div class="search-suggested-block selected-posts-block">
@@ -369,7 +369,7 @@
       </div>
     </div>
   </div>
-  <script src="/app.js?v=20260327d"></script>
+  <script src="/app.js?v=20260327f"></script>
 </body>
 </html>
 

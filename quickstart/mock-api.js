@@ -410,6 +410,51 @@ const server = http.createServer(async (req, res) => {
           caption: "Novi highlight trenutak",
           story_kind: "highlight",
           createdAt: new Date(now - 9 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: viewer.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-viewer-1/1080/1920",
+          durationMinutes: 35,
+          caption: "Jutro uz kafu i laptop",
+          story_kind: "story",
+          createdAt: new Date(now - 14 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: viewer.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/highlight-viewer-1/1080/1920",
+          durationMinutes: 120,
+          caption: "Kod i kafa setup",
+          story_kind: "highlight",
+          createdAt: new Date(now - 12 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: third.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-nature-third/1080/1920",
+          durationMinutes: 42,
+          caption: "Priroda i mirno popodne",
+          story_kind: "story",
+          createdAt: new Date(now - 10 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: aleksandraStoryUser.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/highlight-aleksandra-flowers/1080/1920",
+          durationMinutes: 90,
+          caption: "Cvece i pastelne boje",
+          story_kind: "highlight",
+          createdAt: new Date(now - 15 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: marijaStoryUser.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-marija-drawing/1080/1920",
+          durationMinutes: 38,
+          caption: "Skica i inspiracija",
+          story_kind: "story",
+          createdAt: new Date(now - 5 * 60 * 1000).toISOString()
         }
       ];
 
@@ -682,6 +727,7 @@ const server = http.createServer(async (req, res) => {
         media_type: mediaType,
         media_url: mediaUrl,
         caption,
+        story_kind: String(body.storyKind || "story").toLowerCase() === "highlight" ? "highlight" : "story",
         durationMinutes,
         createdAt: createdAt.toISOString(),
         expiresAt: new Date(createdAt.getTime() + durationMinutes * 60000).toISOString()
