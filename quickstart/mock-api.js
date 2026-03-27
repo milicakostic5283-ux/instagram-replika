@@ -281,6 +281,26 @@ const server = http.createServer(async (req, res) => {
 
       const aleksandraStoryUser = users.find((u) => u.username === "aleksandra") || target;
       const marijaStoryUser = users.find((u) => u.username === "marija") || third;
+      const seededStoryAuthors = new Set([viewer.id, target.id, third.id, aleksandraStoryUser.id, marijaStoryUser.id]);
+      const removedStoryIds = new Set(stories.filter((s) => seededStoryAuthors.has(s.authorId)).map((s) => s.id));
+
+      for (let i = stories.length - 1; i >= 0; i -= 1) {
+        if (seededStoryAuthors.has(stories[i].authorId)) stories.splice(i, 1);
+      }
+      for (const key of Array.from(storyLikes)) {
+        const storyId = Number(String(key).split(":")[1]);
+        if (removedStoryIds.has(storyId)) storyLikes.delete(key);
+      }
+      for (let i = storyComments.length - 1; i >= 0; i -= 1) {
+        if (removedStoryIds.has(storyComments[i].storyId)) storyComments.splice(i, 1);
+      }
+      for (let i = notifications.length - 1; i >= 0; i -= 1) {
+        const n = notifications[i];
+        if ((n.type === "story_like" || n.type === "story_comment") && /story #(\d+)/.test(String(n.text || ""))) {
+          const storyId = Number(String(n.text).match(/story #(\d+)/)?.[1] || 0);
+          if (removedStoryIds.has(storyId)) notifications.splice(i, 1);
+        }
+      }
 
       const sampleStories = [
         {
