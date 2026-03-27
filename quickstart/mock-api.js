@@ -142,7 +142,7 @@ function makeStoryView(s) {
   const likesCount = Array.from(storyLikes).filter(x => Number(x.split(":")[1]) === s.id).length;
   const commentsCount = storyComments.filter(c => c.storyId === s.id).length;
   const remainingMs = Math.max(0, new Date(s.expiresAt).getTime() - Date.now());
-  return { ...s, likesCount, commentsCount, remainingMinutes: Math.ceil(remainingMs / 60000) };
+  return { ...s, story_kind: s.story_kind || "story", likesCount, commentsCount, remainingMinutes: Math.ceil(remainingMs / 60000) };
 }
 
 const server = http.createServer(async (req, res) => {
@@ -289,6 +289,7 @@ const server = http.createServer(async (req, res) => {
           media_url: "https://picsum.photos/seed/story-target-1/1080/1920",
           durationMinutes: 90,
           caption: "Story iz centra grada",
+          story_kind: "story",
           createdAt: new Date(now - 25 * 60 * 1000).toISOString()
         },
         {
@@ -297,6 +298,7 @@ const server = http.createServer(async (req, res) => {
           media_url: "https://samplelib.com/lib/preview/mp4/sample-20s.mp4",
           durationMinutes: 120,
           caption: "Kratki video story",
+          story_kind: "story",
           createdAt: new Date(now - 20 * 60 * 1000).toISOString()
         },
         {
@@ -305,6 +307,7 @@ const server = http.createServer(async (req, res) => {
           media_url: "https://picsum.photos/seed/story-target-2/1080/1920",
           durationMinutes: 75,
           caption: "Kafa i jutarnji vibe",
+          story_kind: "highlight",
           createdAt: new Date(now - 16 * 60 * 1000).toISOString()
         },
         {
@@ -313,6 +316,7 @@ const server = http.createServer(async (req, res) => {
           media_url: "https://picsum.photos/seed/story-target-3/1080/1920",
           durationMinutes: 50,
           caption: "Fit check pre izlaska",
+          story_kind: "highlight",
           createdAt: new Date(now - 11 * 60 * 1000).toISOString()
         },
         {
@@ -321,6 +325,7 @@ const server = http.createServer(async (req, res) => {
           media_url: "https://samplelib.com/lib/preview/mp4/sample-30s.mp4",
           durationMinutes: 45,
           caption: "Mini reel u story formatu",
+          story_kind: "story",
           createdAt: new Date(now - 7 * 60 * 1000).toISOString()
         },
         {
@@ -329,6 +334,7 @@ const server = http.createServer(async (req, res) => {
           media_url: "https://picsum.photos/seed/story-third-1/1080/1920",
           durationMinutes: 60,
           caption: "Popodnevni story",
+          story_kind: "story",
           createdAt: new Date(now - 18 * 60 * 1000).toISOString()
         },
         {
@@ -337,6 +343,7 @@ const server = http.createServer(async (req, res) => {
           media_url: "https://picsum.photos/seed/story-third-2/1080/1920",
           durationMinutes: 55,
           caption: "Backstage detalj",
+          story_kind: "highlight",
           createdAt: new Date(now - 13 * 60 * 1000).toISOString()
         },
         {
@@ -345,6 +352,7 @@ const server = http.createServer(async (req, res) => {
           media_url: "https://filesamples.com/samples/video/mp4/sample_960x400_ocean_with_audio.mp4",
           durationMinutes: 40,
           caption: "Vecernji story video",
+          story_kind: "story",
           createdAt: new Date(now - 8 * 60 * 1000).toISOString()
         },
         {
@@ -353,6 +361,7 @@ const server = http.createServer(async (req, res) => {
           media_url: "https://picsum.photos/seed/story-aleksandra-1/1080/1920",
           durationMinutes: 70,
           caption: "Mirror selfie pre izlaska",
+          story_kind: "story",
           createdAt: new Date(now - 17 * 60 * 1000).toISOString()
         },
         {
@@ -361,6 +370,7 @@ const server = http.createServer(async (req, res) => {
           media_url: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
           durationMinutes: 35,
           caption: "Brzi story update",
+          story_kind: "highlight",
           createdAt: new Date(now - 6 * 60 * 1000).toISOString()
         },
         {
@@ -369,6 +379,7 @@ const server = http.createServer(async (req, res) => {
           media_url: "https://picsum.photos/seed/story-marija-1/1080/1920",
           durationMinutes: 80,
           caption: "Beauty corner",
+          story_kind: "highlight",
           createdAt: new Date(now - 21 * 60 * 1000).toISOString()
         },
         {
@@ -377,6 +388,7 @@ const server = http.createServer(async (req, res) => {
           media_url: "https://picsum.photos/seed/story-marija-2/1080/1920",
           durationMinutes: 50,
           caption: "Novi highlight trenutak",
+          story_kind: "highlight",
           createdAt: new Date(now - 9 * 60 * 1000).toISOString()
         }
       ];

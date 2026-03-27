@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Instagram</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="stylesheet" href="/styles.css?v=20260327b" />
+  <link rel="stylesheet" href="/styles.css?v=20260327c" />
 </head>
 <body>
   <header class="topbar" id="topHome">
@@ -249,6 +249,10 @@
       <input id="storyMediaUrl" placeholder="Story media URL" />
       <input id="storyMediaFile" type="file" accept="image/*,video/*" />
       <p class="small">Moze slika ili video. Maksimalno 5 aktivnih story stavki po korisniku.</p>
+      <select id="storyKind">
+        <option value="story">Story</option>
+        <option value="highlight">Highlight</option>
+      </select>
       <input id="storyMediaType" placeholder="image ili video" value="image" />
       <input id="storyDuration" type="number" min="1" step="1" placeholder="Trajanje u minutima" value="60" />
       <button id="btnCreateStory" type="button">Objavi story</button>
@@ -365,7 +369,7 @@
       </div>
     </div>
   </div>
-  <script src="/app.js?v=20260327b"></script>
+  <script src="/app.js?v=20260327c"></script>
 </body>
 </html>
 
