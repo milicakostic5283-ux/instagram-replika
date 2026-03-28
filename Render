@@ -1,0 +1,10 @@
+<div className="story-bar">
+  {stories.map(user => (
+    <div key={user.user_id} className="story-user">
+      <div className="story-circle">
+        <img src={user.stories[0].media_url} alt="story preview" />
+      </div>
+      <p>{user.username}</p>
+    </div>
+  ))}
+</div>
