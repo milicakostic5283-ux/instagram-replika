@@ -341,12 +341,12 @@ const server = http.createServer(async (req, res) => {
         },
         {
           authorId: target.id,
-          media_type: "video",
-          media_url: "https://samplelib.com/lib/preview/mp4/sample-30s.mp4",
-          durationMinutes: 45,
-          caption: "Mini reel u story formatu",
-          story_kind: "story",
-          createdAt: new Date(now - 7 * 60 * 1000).toISOString()
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-target-flower/1080/1920",
+          durationMinutes: 58,
+          caption: "Cvece i miran ugao grada",
+          story_kind: "highlight",
+          createdAt: new Date(now - 6 * 60 * 1000).toISOString()
         },
         {
           authorId: third.id,
@@ -374,6 +374,15 @@ const server = http.createServer(async (req, res) => {
           caption: "Vecernji story video",
           story_kind: "story",
           createdAt: new Date(now - 8 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: third.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-third-drawing/1080/1920",
+          durationMinutes: 52,
+          caption: "Skica i par poteza za inspiraciju",
+          story_kind: "highlight",
+          createdAt: new Date(now - 4 * 60 * 1000).toISOString()
         },
         {
           authorId: aleksandraStoryUser.id,
@@ -430,6 +439,15 @@ const server = http.createServer(async (req, res) => {
           createdAt: new Date(now - 12 * 60 * 1000).toISOString()
         },
         {
+          authorId: viewer.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/highlight-viewer-nature/1080/1920",
+          durationMinutes: 95,
+          caption: "Pauza uz park i malo sunca",
+          story_kind: "highlight",
+          createdAt: new Date(now - 11 * 60 * 1000).toISOString()
+        },
+        {
           authorId: third.id,
           media_type: "image",
           media_url: "https://picsum.photos/seed/story-nature-third/1080/1920",
@@ -455,6 +473,24 @@ const server = http.createServer(async (req, res) => {
           caption: "Skica i inspiracija",
           story_kind: "story",
           createdAt: new Date(now - 5 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: aleksandraStoryUser.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/story-aleksandra-code/1080/1920",
+          durationMinutes: 47,
+          caption: "Programiranje uz kafu i dobar flow",
+          story_kind: "story",
+          createdAt: new Date(now - 3 * 60 * 1000).toISOString()
+        },
+        {
+          authorId: marijaStoryUser.id,
+          media_type: "image",
+          media_url: "https://picsum.photos/seed/highlight-marija-flowers/1080/1920",
+          durationMinutes: 88,
+          caption: "Nezni tonovi i cvece",
+          story_kind: "highlight",
+          createdAt: new Date(now - 2 * 60 * 1000).toISOString()
         }
       ];
 
