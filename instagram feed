@@ -1,0 +1,50 @@
+from flask import Blueprint, jsonify, request
+from datetime import datetime
+from models import Story, Follow, User
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
+stories_bp = Blueprint("stories", __name__)
+
+@stories_bp.route("/stories/feed", methods=["GET"])
+@jwt_required()
+def get_story_feed():
+    current_user_id = get_jwt_identity()
+
+    # korisnici koje pratim
+    following = Follow.query.filter_by(follower_id=current_user_id).all()
+    following_ids = [f.followed_id for f in following]
+
+    # dodaj i sebe
+    following_ids.append(current_user_id)
+
+    # samo aktivni story-ji
+    now = datetime.utcnow()
+
+    stories = Story.query.filter(
+        Story.user_id.in_(following_ids),
+        Story.expires_at > now
+    ).order_by(Story.created_at.desc()).all()
+
+    # grupisanje po korisniku
+    result = {}
+
+    for story in stories:
+        user_id = story.user_id
+
+        if user_id not in result:
+            user = User.query.get(user_id)
+            result[user_id] = {
+                "user_id": user_id,
+                "username": user.username,
+                "stories": []
+            }
+
+        result[user_id]["stories"].append({
+            "id": story.id,
+            "media_url": story.media_url,
+            "media_type": story.media_type,
+            "created_at": story.created_at.isoformat(),
+            "expires_at": story.expires_at.isoformat()
+        })
+
+    return jsonify(list(result.values()))
