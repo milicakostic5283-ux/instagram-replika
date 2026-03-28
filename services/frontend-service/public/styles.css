@@ -4790,6 +4790,38 @@ body.direct-open #profileExperience {
   max-height: 120px !important;
 }
 
+/* DM polish 20260328a: keep inline layout, just improve scrolling and spacing */
+#directCard .direct-layout {
+  grid-template-columns: 236px minmax(0, 1fr) !important;
+  gap: 14px !important;
+}
+
+#directCard .direct-inbox-list {
+  max-height: 320px !important;
+  overflow: auto !important;
+  scroll-behavior: smooth !important;
+  padding-right: 4px !important;
+}
+
+#directCard .direct-thread {
+  min-height: 220px !important;
+  max-height: 320px !important;
+  overflow: auto !important;
+  scroll-behavior: smooth !important;
+  padding-right: 6px !important;
+}
+
+#directCard .direct-compose textarea {
+  min-height: 96px !important;
+  max-height: 140px !important;
+}
+
+#directCard .direct-inbox-item,
+#directCard .dm-bubble,
+#directCard .direct-thread-head {
+  border-radius: 16px !important;
+}
+
 /* safe search/block dark patch 20260315b */
 #searchResults .search-user-card,
 #searchResults article.search-user-card {
