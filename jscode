@@ -1,0 +1,10 @@
+const fetchStories = async () => {
+  const res = await fetch("/stories/feed", {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+
+  const data = await res.json();
+  setStories(data);
+};
