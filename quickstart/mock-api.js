@@ -161,15 +161,12 @@ const server = http.createServer(async (req, res) => {
       const viewerId = meId(req, url);
       const viewer = users.find((u) => u.id === viewerId) || users[0];
 
-      const preferredOrder = ["milica", "tamara", "aleksandra", "natalija", "marija"];
-      const preferredOthers = preferredOrder
-        .map((username) => users.find((u) => u.username === username && u.id !== viewer.id))
-        .filter(Boolean);
-      const others = preferredOthers.length ? preferredOthers : users.filter((u) => u.id !== viewer.id);
-      const target = others[0] || users[0];
-      const third = others[1] || target;
+      const target = users.find((u) => u.username === "tamara" && u.id !== viewer.id) || users.find((u) => u.id !== viewer.id) || users[0];
+      const third = users.find((u) => u.username === "natalija" && u.id !== viewer.id && u.id !== target.id) || users.find((u) => u.id !== viewer.id && u.id !== target.id) || target;
+      const aleksandraStoryUser = users.find((u) => u.username === "aleksandra" && u.id !== viewer.id) || third;
+      const marijaStoryUser = users.find((u) => u.username === "marija" && u.id !== viewer.id) || third;
 
-      [target.id, third.id].forEach((id) => {
+      [target.id, third.id, aleksandraStoryUser.id, marijaStoryUser.id].forEach((id) => {
         follows.set(`${viewer.id}:${id}`, "accepted");
         follows.set(`${id}:${viewer.id}`, "accepted");
       });
@@ -279,8 +276,6 @@ const server = http.createServer(async (req, res) => {
         pushNotification(viewer.id, "new_comment", `@${target.username} je komentarisao tvoju objavu #${p.id}`);
       });
 
-      const aleksandraStoryUser = users.find((u) => u.username === "aleksandra") || target;
-      const marijaStoryUser = users.find((u) => u.username === "marija") || third;
       const seededStoryAuthors = new Set([viewer.id, target.id, third.id, aleksandraStoryUser.id, marijaStoryUser.id]);
       const removedStoryIds = new Set(stories.filter((s) => seededStoryAuthors.has(s.authorId)).map((s) => s.id));
 
@@ -342,7 +337,7 @@ const server = http.createServer(async (req, res) => {
         {
           authorId: target.id,
           media_type: "image",
-          media_url: "https://picsum.photos/seed/story-target-flower/1080/1920",
+          media_url: "/assets/highlight-1.svg",
           durationMinutes: 58,
           caption: "Cvece i miran ugao grada",
           story_kind: "highlight",
@@ -432,7 +427,7 @@ const server = http.createServer(async (req, res) => {
         {
           authorId: viewer.id,
           media_type: "image",
-          media_url: "https://picsum.photos/seed/highlight-viewer-1/1080/1920",
+          media_url: "/assets/highlight-2.svg",
           durationMinutes: 120,
           caption: "Kod i kafa setup",
           story_kind: "highlight",
@@ -468,7 +463,7 @@ const server = http.createServer(async (req, res) => {
         {
           authorId: marijaStoryUser.id,
           media_type: "image",
-          media_url: "https://picsum.photos/seed/story-marija-drawing/1080/1920",
+          media_url: "/assets/highlight-3.svg",
           durationMinutes: 38,
           caption: "Skica i inspiracija",
           story_kind: "story",
@@ -477,7 +472,7 @@ const server = http.createServer(async (req, res) => {
         {
           authorId: aleksandraStoryUser.id,
           media_type: "image",
-          media_url: "https://picsum.photos/seed/story-aleksandra-code/1080/1920",
+          media_url: "/assets/highlight-2.svg",
           durationMinutes: 47,
           caption: "Programiranje uz kafu i dobar flow",
           story_kind: "story",
