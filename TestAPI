@@ -1,0 +1,9 @@
+def test_get_stories(client):
+    response = client.get("/stories/feed")
+
+    assert response.status_code == 200
+def test_empty_story_list(client):
+    response = client.get("/stories/feed")
+    data = response.get_json()
+
+    assert isinstance(data, list)
