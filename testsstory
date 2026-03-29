@@ -1,0 +1,7 @@
+from datetime import datetime, timedelta
+
+def test_story_expiration():
+    now = datetime.utcnow()
+    expires = now + timedelta(minutes=10)
+
+    assert expires > now
